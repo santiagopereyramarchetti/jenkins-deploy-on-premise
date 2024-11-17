@@ -41,13 +41,13 @@ pipeline{
                 script{
                     sh '''
                         chmod +x ./docker/project-install.sh
-                        ./docker/project-install.sh '${DB_CONNECTION}' \
-                            '${DB_HOST}' \
-                            '${DB_PORT}' \
-                            '${DB_NAME}' \
-                            '${DB_USER}' \
-                            '${DB_PASSWORD}' \
-                            '${DB_HOST_MYSQL}' \
+                        ./docker/project-install.sh \$DB_CONNECTION \
+                            \$DB_HOST \
+                            \$DB_PORT \
+                            \$DB_NAME \
+                            \$DB_USER \
+                            \$DB_PASSWORD \
+                            \$DB_HOST_MYSQL \
                     '''
                 }
             }

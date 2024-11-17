@@ -27,82 +27,82 @@ pipeline{
     }
 
     stages{
-        // stage("Preparando todo el entorno"){
-        //     steps{
-        //         script{
-        //             sh 'bash ./docker/server-provision.sh'
-        //             sh 'cp ./docker/supervisord.local.conf /etc/supervisor/supervisord.conf'
-        //             sh '/usr/bin/supervisord -c /etc/supervisor/supervisord.conf'
-        //         }
-        //     }
-        // }
-        // stage("Build"){
-        //     steps{
-        //         script{
-        //             sh '''
-        //                 chmod +x ./docker/project-install.sh
-        //                 ./docker/project-install.sh \$DB_CONNECTION \
-        //                     \$DB_HOST \
-        //                     \$DB_PORT \
-        //                     \$DB_NAME \
-        //                     \$DB_USER \
-        //                     \$DB_PASSWORD \
-        //                     \$DB_HOST_MYSQL \
-        //             '''
-        //         }
-        //     }
-        // }
-        // stage("Análisis de código estático"){
-        //     steps{
-        //         sh './backend/vendor/bin/phpstan analyse --configuration=./backend/phpstan.neon'
-        //     }
-        // }
-        // stage("Análisis de la calidad del código"){
-        //     steps{
-        //         script{
-        //             def userInput = input(
-        //                 message: 'Ejecutar este step?',
-        //                 parameters:[
-        //                     choice(name: 'Selecciona una opción', choices: ['Si', 'No'], description: 'Elegir si queres ejecutar este step')
-        //                 ]
-        //             )
-        //             if (userInput == 'Si'){
-        //                 sh '''
-        //                     cd ./backend
-        //                     php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90
-        //                     cd ..
-        //                     '''
-        //             }else{
-        //                 echo 'Step omitido. Siguiendo adelante...'
-        //             }
-        //         }
-        //     }
-        // }
-        // stage("Test unitarios"){
-        //     steps{
-        //         script{
-        //             sh '''
-        //                 cd ./backend
-        //                 php artisan test
-        //                 cd ..
-        //                 '''
-        //         }
-        //     }
-        // }
+        stage("Preparando todo el entorno"){
+            steps{
+                script{
+                    sh 'bash ./docker/server-provision.sh'
+                    sh 'cp ./docker/supervisord.local.conf /etc/supervisor/supervisord.conf'
+                    sh '/usr/bin/supervisord -c /etc/supervisor/supervisord.conf'
+                }
+            }
+        }
+        stage("Build"){
+            steps{
+                script{
+                    sh '''
+                        chmod +x ./docker/project-install.sh
+                        ./docker/project-install.sh \$DB_CONNECTION \
+                            \$DB_HOST \
+                            \$DB_PORT \
+                            \$DB_NAME \
+                            \$DB_USER \
+                            \$DB_PASSWORD \
+                            \$DB_HOST_MYSQL \
+                    '''
+                }
+            }
+        }
+        stage("Análisis de código estático"){
+            steps{
+                sh './backend/vendor/bin/phpstan analyse --configuration=./backend/phpstan.neon'
+            }
+        }
+        stage("Análisis de la calidad del código"){
+            steps{
+                script{
+                    def userInput = input(
+                        message: 'Ejecutar este step?',
+                        parameters:[
+                            choice(name: 'Selecciona una opción', choices: ['Si', 'No'], description: 'Elegir si queres ejecutar este step')
+                        ]
+                    )
+                    if (userInput == 'Si'){
+                        sh '''
+                            cd ./backend
+                            php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90
+                            cd ..
+                            '''
+                    }else{
+                        echo 'Step omitido. Siguiendo adelante...'
+                    }
+                }
+            }
+        }
+        stage("Test unitarios"){
+            steps{
+                script{
+                    sh '''
+                        cd ./backend
+                        php artisan test
+                        cd ..
+                        '''
+                }
+            }
+        }
         stage("Deployando nueva release"){
             steps{
                 sshagent(credentials: ['onpremise-vps']){
                     sh '''
                         scp -o StrictHostKeyChecking=no ./docker/project-deploy.sh ${REMOTE_HOST}:~/project-deploy.sh
                         ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} "bash ~/project-deploy.sh '${PROJECT_NAME}' \
-                            '${GITHUB_REPO}'
+                            '${GITHUB_REPO}' \
                             '${DB_CONNECTION}' \
                             '${DB_HOST}' \
                             '${DB_PORT}' \
                             '${DB_NAME}' \
                             '${DB_USER}' \
                             '${DB_PASSWORD}' \
-                            '${DB_HOST_MYSQL}' \
+                            '${DB_HOST_MYSQL}'"
                     '''
                 }  
             }

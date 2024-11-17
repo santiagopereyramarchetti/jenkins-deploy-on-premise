@@ -10,7 +10,7 @@
 
 # Description:
     # Este script va a instalar las siguientes dependencias:
-        # vim, git, curl, wget, unzip 
+        # vim, git, curl, wget, unzip, openssh-server
         # nginx 
         # php 8.2 
         # php dependencies for laravel 8.2 
@@ -57,7 +57,7 @@ apt update -y
 echo -e "##############"
 echo "2 - Instalando vim, git, curl, wget, unzip"
 echo -e "##############"
-apt install vim git curl wget unzip -y
+apt install vim git curl wget unzip openssh-server -y
 sleep 3
 
 echo -e "##############"

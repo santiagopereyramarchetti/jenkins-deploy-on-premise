@@ -66,7 +66,7 @@ else
     git clone ${GITHUB_REPO}
     cp -r ${PROJECT_NAME}/* ${PROJECT_NAME}/.* ./
     rm -rf ${PROJECT_NAME}
-    usermod -aG www-data $(whoami)
+    sudo usermod -aG www-data $(whoami)
 fi
 
 echo -e "##############"
@@ -86,9 +86,9 @@ cd ..
 echo -e "##############"
 echo "3 - Inicializando MySQL si todavia no fue realizado"
 echo -e "##############"
-if [ -z "$(mysql -u root -e "SHOW DATABASES LIKE '$DB_NAME';")" ]; then
+if [ -z "$(sudo mysql -u root -e "SHOW DATABASES LIKE '$DB_NAME';")" ]; then
 echo "DDBB no inicializada aun. Comenzando la inicializacion"
-mysql -u root <<EOF
+sudo mysql -u root <<EOF
 CREATE DATABASE IF NOT EXISTS $DB_NAME;
 CREATE USER IF NOT EXISTS '$DB_USER'@'$DB_HOST_MYSQL' IDENTIFIED BY '$DB_PASSWORD';
 GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'$DB_HOST_MYSQL';
@@ -102,6 +102,7 @@ echo -e "##############"
 echo "4 - Completando archivo .env"
 echo -e "##############"
 cd ./backend
+rm .env
 cp .env.example .env
 sed -i "/DB_CONNECTION=sqlite/c\DB_CONNECTION=$DB_CONNECTION" "./.env"
 sed -i "/# DB_HOST=127.0.0.1/c\DB_HOST=$DB_HOST" "./.env"
@@ -123,9 +124,9 @@ php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-chown -R www-data:www-data storage bootstrap
-chmod -R 775 storage bootstrap
-chmod -R 777 storage/logs storage/framework bootstrap/cache
+sudo chown -R www-data:www-data storage bootstrap
+sudo chmod -R 775 storage bootstrap
+sudo chmod -R 777 storage/logs storage/framework bootstrap/cache
 php artisan up
 cd ..
 
@@ -140,8 +141,8 @@ cd ..
 echo -e "##############"
 echo "7 - Modificando archivo de configuración de nginx"
 echo -e "##############"
-rm -f /etc/nginx/sites-available/default
-tee /etc/nginx/sites-available/default > /dev/null <<EOF
+sudo rm -f /etc/nginx/sites-available/default
+sudo tee /etc/nginx/sites-available/default > /dev/null <<EOF
 server {
         server_name _;
         listen 80;
@@ -168,7 +169,7 @@ server {
         }
 }
 EOF
-/usr/sbin/nginx -s reload
+sudo systemctl restart nginx
 
 echo -e "##############"
 echo "Proyecto con Laravel 11 y Vue 3 deployado con exito"

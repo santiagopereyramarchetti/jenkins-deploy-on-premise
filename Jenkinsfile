@@ -63,7 +63,7 @@ pipeline{
                     def userInput = input(
                         message: 'Ejecutar este step?',
                         parameters:[
-                            choice(name: 'Selecciona una opción', choice: ['Si', 'No'], description: 'Elegir si queres ejecutar este step')
+                            choice(name: 'Selecciona una opción', choices: ['Si', 'No'], description: 'Elegir si queres ejecutar este step')
                         ]
                     )
                     if (userInput == 'Si'){

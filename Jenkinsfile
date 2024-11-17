@@ -38,6 +38,7 @@ pipeline{
             steps{
                 script{
                     sh '''
+                        chmod +x ./docker/project-install.sh
                         ./docker/project-install.sh '${DB_CONNECTION}' \
                             '${DB_HOST}' \
                             '${DB_PORT}' \

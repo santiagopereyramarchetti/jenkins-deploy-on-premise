@@ -54,7 +54,7 @@ pipeline{
         }
         stage("Análisis de código estático"){
             steps{
-                sh './backend/vendor/bin/phpstan analyse'
+                sh './backend/vendor/bin/phpstan analyse --configuration=./backend/phpstan.neon'
             }
         }
         stage("Análisis de la calidad del código"){

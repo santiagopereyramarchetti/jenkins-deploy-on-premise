@@ -56,16 +56,18 @@ pipeline{
         }
         stage("Análisis de la calidad del código"){
             steps{
-                def userInput = input(
-                    message: 'Ejecutar este step?',
-                    parameters:[
-                        choice(name: 'Selecciona una opción', choice: ['Si', 'No'], description: 'Elegir si queres ejecutar este step')
-                    ]
-                )
-                if (userInput == 'Si'){
-                    sh 'php ./backend/artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90'
-                }else{
-                    echo 'Step omitido. Siguiendo adelante...'
+                script{
+                    def userInput = input(
+                        message: 'Ejecutar este step?',
+                        parameters:[
+                            choice(name: 'Selecciona una opción', choice: ['Si', 'No'], description: 'Elegir si queres ejecutar este step')
+                        ]
+                    )
+                    if (userInput == 'Si'){
+                        sh 'php ./backend/artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90'
+                    }else{
+                        echo 'Step omitido. Siguiendo adelante...'
+                    }
                 }
             }
         }

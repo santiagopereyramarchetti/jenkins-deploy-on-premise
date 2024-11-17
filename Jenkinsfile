@@ -67,7 +67,11 @@ pipeline{
                         ]
                     )
                     if (userInput == 'Si'){
-                        sh 'php ./backend/artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90'
+                        sh '''
+                            cd ./backend
+                            php artisan insights --no-interaction --min-quality=90 --min-complexity=90 --min-architecture=90 --min-style=90
+                            cd ..
+                            '''
                     }else{
                         echo 'Step omitido. Siguiendo adelante...'
                     }
@@ -77,7 +81,11 @@ pipeline{
         stage("Test unitarios"){
             steps{
                 script{
-                    sh 'php ./backend/artisan test'
+                    sh '''
+                        cd ./backend
+                        php artisan test
+                        cd ..
+                        '''
                 }
             }
         }

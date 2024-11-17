@@ -52,7 +52,7 @@ echo -e "##############"
 echo "1 - Instalar dependencias de Laravel"
 echo -e "##############"
 cd ./backend
-composer install --no-interaction --optimize-autoloader --no-dev
+composer install --no-interaction --optimize-autoloader
 cd ..
 
 echo -e "##############"

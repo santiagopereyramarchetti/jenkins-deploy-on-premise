@@ -13,7 +13,7 @@ pipeline{
 
     environment {
         PROJECT_NAME="on-premise"
-        GITHUB_REPO=https://github.com/santiagopereyramarchetti/on-premise.git
+        GITHUB_REPO="https://github.com/santiagopereyramarchetti/on-premise.git"
 
         DB_CONNECTION="mysql"
         DB_HOST="127.0.0.1"
@@ -49,14 +49,6 @@ pipeline{
                 }
             }
         }
-        // Agregar los paquetes necesarios para ejecutar los test. Esto
-        // hacerlo usando la image creada para este proyecto y poniendo
-        // volumes hacia el código, asi se actualiza cuando agreamos
-        // bibliotecas.
-
-        // docker run -d --name my-onpremise -v ./backend:/var/www/backend -v ./frontend:/var/www/frontend -p 9595:80 my-environment
-        
-        // También ejecutar los comandos de los test dentro del container para ver si fallan
         stage("Análisis de código estático"){
             steps{
                 sh './backend/vendor/bin/phpstan analyse'

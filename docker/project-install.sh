@@ -62,6 +62,7 @@ cd ./frontend
 npm install
 cd ..
 
+## FALLA
 echo -e "##############"
 echo "3 - Inicializando MySQL si todavia no fue realizado"
 echo -e "##############"
@@ -115,7 +116,7 @@ cd ./frontend
 npm run build
 cd ..
 
-## Copiar configuración de nginx
+## FALLA
 echo -e "##############"
 echo "7 - Modificando archivo de configuración de nginx"
 echo -e "##############"

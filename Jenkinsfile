@@ -31,7 +31,7 @@ pipeline{
             steps{
                 script{
                     sh 'bash ./docker/server-provision.sh'
-                    sh 'cp ./docker/supervisord.conf /etc/supervisor/supervisord.conf'
+                    sh 'cp ./docker/supervisord.local.conf /etc/supervisor/supervisord.conf'
                     sh '/usr/bin/supervisord -c /etc/supervisor/supervisord.conf'
                 }
             }
